@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividade de Biologia - 3º Bimestre | 2ª Série EM</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: silver; padding: 20px; color: #333; }
+.container { max-width: 1000px; margin: 0 auto; }
+
+/* ===== CABEÇALHO ===== */
+header {
+  background: linear-gradient(to right, #0066cc, #000033);
+  color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3), 0 0 15px rgba(255,255,255,0.5) inset;
+}
+.school-name { text-align: center; font-size: 1.7em; font-weight: bold; margin-bottom: 6px; letter-spacing: .5px; }
+.activity-title { text-align: center; font-size: 1.25em; margin-bottom: 4px; }
+.activity-sub { text-align: center; font-size: .95em; opacity: .9; margin-bottom: 16px; }
+.student-info { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.info-group { display: flex; flex-direction: column; }
+.info-group label { font-weight: bold; margin-bottom: 4px; font-size: .9em; }
+.info-group select, .info-group input {
+  padding: 9px 10px; border-radius: 6px; border: none; font-size: 1em; color: #222; background: #fff;
+}
+.info-group select:disabled { background: #ddd; color: #777; }
+.info-group input[readonly] { background: #e8eef8; font-weight: bold; }
+.info-group.full { grid-column: 1 / -1; }
+
+/* ===== INSTRUÇÕES ===== */
+.instructions {
+  background: #fff; border-left: 6px solid #0066cc; border-radius: 10px; padding: 16px 20px; margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15); line-height: 1.5;
+}
+.instructions h2 { color: #003366; font-size: 1.1em; margin-bottom: 6px; }
+.instructions ul { margin-left: 20px; }
+
+/* ===== QUESTÕES ===== */
+.question {
+  background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+.q-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.q-number {
+  background: linear-gradient(to right, #0066cc, #000033); color: #fff; font-weight: bold;
+  padding: 6px 14px; border-radius: 20px; font-size: .95em;
+}
+.q-tag { background: #e8eef8; color: #003366; font-size: .78em; padding: 4px 10px; border-radius: 12px; font-weight: 600; }
+.q-text { line-height: 1.6; margin-bottom: 14px; font-size: 1.02em; }
+.q-text p + p { margin-top: 8px; }
+.q-command { font-weight: bold; color: #003366; }
+
+.q-image {
+  background: #f7f9fc; border: 1px solid #d5deea; border-radius: 8px; padding: 12px; margin-bottom: 16px; text-align: center;
+}
+.q-image svg { width: 100%; height: auto; max-width: 760px; display: block; margin: 0 auto; }
+.q-image figcaption { font-size: .82em; color: #555; margin-top: 8px; font-style: italic; }
+
+/* ===== ALTERNATIVAS: alto relevo → afundar ===== */
+.alternativas { display: flex; flex-direction: column; gap: 10px; }
+.alternativa {
+  display: flex; gap: 10px; align-items: flex-start; text-align: left; width: 100%;
+  background: #f4f6f9; border: 1px solid #d9dee6; border-radius: 8px; padding: 12px 14px;
+  font-size: 1em; color: #222; line-height: 1.45;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.3), -2px -2px 6px rgba(255,255,255,0.6);
+  transition: all 0.15s ease-in-out; cursor: pointer;
+}
+.alternativa:hover { background: #eaf1fb; }
+.alternativa .letra {
+  flex: 0 0 28px; height: 28px; border-radius: 50%; background: #0066cc; color: #fff;
+  display: flex; align-items: center; justify-content: center; font-weight: bold;
+}
+.alternativa.selecionada {
+  box-shadow: inset 3px 3px 6px rgba(0,0,0,0.4);
+  transform: translateY(2px);
+  background-color: #145A32; /* verde escuro */
+  color: #FFFFFF; font-weight: bold; border-color: #0e3f23;
+}
+.alternativa.selecionada .letra { background: #fff; color: #145A32; }
+.alternativa:disabled { cursor: default; }
+
+/* ===== DISSERTATIVAS ===== */
+textarea.resposta {
+  width: 100%; min-height: 150px; padding: 12px; border-radius: 8px; border: 2px solid #c7d2e0;
+  font-size: 1em; line-height: 1.5; resize: vertical;
+}
+textarea.resposta:focus { outline: none; border-color: #0066cc; }
+.contador { text-align: right; font-size: .8em; color: #666; margin-top: 4px; }
+
+/* ===== ENVIO ===== */
+.footer-bar {
+  background: #fff; border-radius: 10px; padding: 20px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+}
+.progresso { margin-bottom: 12px; font-weight: 600; color: #003366; }
+.barra { height: 10px; background: #dde3ec; border-radius: 5px; overflow: hidden; margin: 0 auto 16px; max-width: 500px; }
+.barra div { height: 100%; width: 0; background: linear-gradient(to right, #0066cc, #145A32); transition: width .3s; }
+#btnEnviar {
+  background: linear-gradient(to right, #0066cc, #000033); color: #fff; border: none; border-radius: 8px;
+  padding: 14px 34px; font-size: 1.1em; font-weight: bold; cursor: pointer;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.3); transition: all .15s;
+}
+#btnEnviar:active { transform: translateY(2px); box-shadow: inset 3px 3px 6px rgba(0,0,0,0.4); }
+#btnEnviar:disabled { background: #888; cursor: not-allowed; }
+#status { margin-top: 14px; font-weight: 600; min-height: 1.3em; }
+#status.ok { color: #145A32; }
+#status.erro { color: #b71c1c; }
+
+@media (max-width: 640px) {
+  body { padding: 10px; }
+  .student-info { grid-template-columns: 1fr; }
+  .school-name { font-size: 1.3em; }
+  .question { padding: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="school-name">E.E. PROFª WANDA MASCAGNI DE SÁ</div>
+  <div class="activity-title">ATIVIDADE AVALIATIVA DE BIOLOGIA — 3º BIMESTRE</div>
+  <div class="activity-sub">Ácidos nucleicos, biotecnologia, imunização, bioética e heredogramas · AE6 e AE7 (EM13CNT304 / EM13CNT305)</div>
+  <div class="student-info">
+    <div class="info-group">
+      <label for="turma">Turma/Série</label>
+      <select id="turma"><option value="">Selecione a turma…</option></select>
+    </div>
+    <div class="info-group">
+      <label for="nome">Nome</label>
+      <select id="nome" disabled><option value="">Selecione primeiro a turma</option></select>
+    </div>
+    <div class="info-group">
+      <label for="ra">RA</label>
+      <input id="ra" type="text" readonly placeholder="Preenchido automaticamente">
+    </div>
+    <div class="info-group">
+      <label for="data">Data</label>
+      <input id="data" type="text" readonly>
+    </div>
+  </div>
+</header>
+
+<section class="instructions">
+  <h2>Instruções</h2>
+  <ul>
+    <li>Selecione primeiro a <b>Turma/Série</b> e depois o seu <b>Nome</b>; o RA aparece automaticamente.</li>
+    <li>A atividade tem <b>10 questões</b>: 7 objetivas (1,0 ponto cada) e 3 dissertativas (até 1,0 ponto cada).</li>
+    <li>Observe com atenção as imagens: elas trazem informações necessárias para responder.</li>
+    <li>A ordem das questões é diferente para cada estudante e muda a cada acesso.</li>
+    <li>Ao terminar, clique em <b>Enviar respostas</b>. O envio só pode ser feito uma vez.</li>
+  </ul>
+</section>
+
+<div id="questoes">
+
+<!-- ================= Q1 — DNA e RNA (aula 2) ================= -->
+<div class="question" data-q="1" data-tipo="obj">
+  <div class="q-head"><span class="q-number">Questão 1</span><span class="q-tag">Objetiva</span></div>
+  <div class="q-text">
+    <p>Em uma aula de laboratório, os estudantes montaram modelos de duas moléculas de ácidos nucleicos encontradas nas células, representadas abaixo como X e Y.</p>
+    <p class="q-command">Com base nas características dos modelos, as moléculas X e Y são, respectivamente:</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 330" role="img" aria-label="Modelo X com fita dupla e modelo Y com fita simples">
+      <text x="190" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#003366">Molécula X</text>
+      <line x1="130" y1="45" x2="130" y2="270" stroke="#1565c0" stroke-width="6"/>
+      <line x1="250" y1="45" x2="250" y2="270" stroke="#1565c0" stroke-width="6"/>
+      <g font-size="15" font-weight="bold" text-anchor="middle">
+        <g transform="translate(0 60)"><rect x="133" y="-12" width="54" height="24" fill="#ffcdd2"/><rect x="193" y="-12" width="54" height="24" fill="#c8e6c9"/><text x="160" y="5">A</text><text x="220" y="5">T</text></g>
+        <g transform="translate(0 100)"><rect x="133" y="-12" width="54" height="24" fill="#fff59d"/><rect x="193" y="-12" width="54" height="24" fill="#bbdefb"/><text x="160" y="5">G</text><text x="220" y="5">C</text></g>
+        <g transform="translate(0 140)"><rect x="133" y="-12" width="54" height="24" fill="#c8e6c9"/><rect x="193" y="-12" width="54" height="24" fill="#ffcdd2"/><text x="160" y="5">T</text><text x="220" y="5">A</text></g>
+        <g transform="translate(0 180)"><rect x="133" y="-12" width="54" height="24" fill="#bbdefb"/><rect x="193" y="-12" width="54" height="24" fill="#fff59d"/><text x="160" y="5">C</text><text x="220" y="5">G</text></g>
+        <g transform="translate(0 220)"><rect x="133" y="-12" width="54" height="24" fill="#ffcdd2"/><rect x="193" y="-12" width="54" height="24" fill="#c8e6c9"/><text x="160" y="5">A</text><text x="220" y="5">T</text></g>
+      </g>
+      <text x="190" y="295" text-anchor="middle" font-size="13">Duas cadeias unidas por pares de bases</text>
+      <text x="190" y="314" text-anchor="middle" font-size="13">Açúcar: <tspan font-weight="bold">desoxirribose</tspan></text>
+
+      <line x1="380" y1="20" x2="380" y2="320" stroke="#999" stroke-dasharray="6 5"/>
+
+      <text x="570" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#003366">Molécula Y</text>
+      <line x1="530" y1="45" x2="530" y2="270" stroke="#6a1b9a" stroke-width="6"/>
+      <g font-size="15" font-weight="bold" text-anchor="middle">
+        <g transform="translate(0 60)"><rect x="533" y="-12" width="54" height="24" fill="#ffcdd2"/><text x="560" y="5">A</text></g>
+        <g transform="translate(0 100)"><rect x="533" y="-12" width="54" height="24" fill="#ffe0b2"/><text x="560" y="5">U</text></g>
+        <g transform="translate(0 140)"><rect x="533" y="-12" width="54" height="24" fill="#fff59d"/><text x="560" y="5">G</text></g>
+        <g transform="translate(0 180)"><rect x="533" y="-12" width="54" height="24" fill="#ffe0b2"/><text x="560" y="5">U</text></g>
+        <g transform="translate(0 220)"><rect x="533" y="-12" width="54" height="24" fill="#bbdefb"/><text x="560" y="5">C</text></g>
+      </g>
+      <text x="570" y="295" text-anchor="middle" font-size="13">Uma única cadeia de nucleotídeos</text>
+      <text x="570" y="314" text-anchor="middle" font-size="13">Açúcar: <tspan font-weight="bold">ribose</tspan></text>
+    </svg>
+    <figcaption>Modelos simplificados (fora de escala) de duas moléculas de ácidos nucleicos.</figcaption>
+  </figure>
+  <div class="alternativas">
+    <button type="button" class="alternativa" data-valor="A"><span class="letra">A</span><span>RNA e DNA, pois X apresenta mais bases nitrogenadas que Y.</span></button>
+    <button type="button" class="alternativa" data-valor="B"><span class="letra">B</span><span>DNA e RNA, e ambas possuem timina e desoxirribose em sua composição.</span></button>
+    <button type="button" class="alternativa" data-valor="C"><span class="letra">C</span><span>DNA e DNA, pois as duas diferem apenas no tamanho da molécula.</span></button>
+    <button type="button" class="alternativa" data-valor="D"><span class="letra">D</span><span>DNA, com fita dupla, desoxirribose e timina; e RNA, com fita simples, ribose e uracila.</span></button>
+    <button type="button" class="alternativa" data-valor="E"><span class="letra">E</span><span>RNA mensageiro e RNA transportador, pois ambas participam da síntese de proteínas.</span></button>
+  </div>
+</div>
+
+<!-- ================= Q2 — Transcrição e tradução (aulas 3 e 4) ================= -->
+<div class="question" data-q="2" data-tipo="obj">
+  <div class="q-head"><span class="q-number">Questão 2</span><span class="q-tag">Objetiva</span></div>
+  <div class="q-text">
+    <p>A insulina usada no tratamento do diabetes é uma proteína. Em uma célula, a informação para produzi-la passa por duas etapas da expressão gênica, indicadas por I e II no esquema.</p>
+    <p class="q-command">Os processos I e II e os locais onde ocorrem são:</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 300" role="img" aria-label="Esquema de célula com processo I no núcleo e processo II no citoplasma">
+      <defs><marker id="b2" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#003366"/></marker></defs>
+      <rect x="15" y="15" width="730" height="265" rx="40" fill="#fffde7" stroke="#f9a825" stroke-width="3"/>
+      <text x="640" y="45" font-size="13" fill="#f57f17" font-weight="bold">CITOPLASMA</text>
+      <ellipse cx="190" cy="148" rx="150" ry="110" fill="#e3f2fd" stroke="#1565c0" stroke-width="3" stroke-dasharray="14 6"/>
+      <text x="190" y="62" text-anchor="middle" font-size="13" fill="#0d47a1" font-weight="bold">NÚCLEO</text>
+      <path d="M70,120 C85,100 100,140 115,120 C130,100 145,140 160,120 C175,100 190,140 205,120" fill="none" stroke="#1565c0" stroke-width="4"/>
+      <path d="M70,130 C85,150 100,110 115,130 C130,150 145,110 160,130 C175,150 190,110 205,130" fill="none" stroke="#0d47a1" stroke-width="4"/>
+      <text x="137" y="100" text-anchor="middle" font-size="13" font-weight="bold">DNA</text>
+      <line x1="140" y1="148" x2="140" y2="182" stroke="#003366" stroke-width="3" marker-end="url(#b2)"/>
+      <text x="160" y="172" font-size="16" font-weight="bold" fill="#c62828">I</text>
+      <path d="M80,205 C95,195 110,215 125,205 C140,195 155,215 170,205 C185,195 200,215 215,205" fill="none" stroke="#c62828" stroke-width="4"/>
+      <text x="148" y="232" text-anchor="middle" font-size="13" font-weight="bold" fill="#c62828">RNAm</text>
+      <path d="M220,205 C280,205 320,200 410,200" fill="none" stroke="#c62828" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#b2)"/>
+      <text x="290" y="186" font-size="11" fill="#555">sai pelo poro</text>
+      <path d="M420,200 C435,190 450,210 465,200 C480,190 495,210 510,200 C525,190 540,210 555,200" fill="none" stroke="#c62828" stroke-width="4"/>
+      <ellipse cx="490" cy="186" rx="34" ry="20" fill="#a5d6a7" stroke="#1b5e20" stroke-width="2"/>
+      <ellipse cx="490" cy="214" rx="40" ry="16" fill="#81c784" stroke="#1b5e20" stroke-width="2"/>
+      <text x="490" y="252" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">ribossomo</text>
+      <text x="530" y="160" font-size="16" font-weight="bold" fill="#c62828">II</text>
+      <path d="M470,140 L470,165" stroke="#6a1b9a" stroke-width="3"/>
+      <text x="362" y="150" font-size="11" fill="#6a1b9a">RNAt + aminoácido</text>
+      <g fill="#ef6c00" stroke="#bf360c">
+        <circle cx="510" cy="120" r="10"/><circle cx="532" cy="108" r="10"/><circle cx="556" cy="100" r="10"/><circle cx="580" cy="96" r="10"/><circle cx="604" cy="98" r="10"/><circle cx="628" cy="104" r="10"/>
+      </g>
+      <text x="600" y="134" font-size="13" font-weight="bold" fill="#bf360c">proteína</text>
+    </svg>
+    <figcaption>Esquema simplificado (fora de escala) da expressão gênica em uma célula eucariótica.</figcaption>
+  </figure>
+  <div class="alternativas">
+    <button type="button" class="alternativa" data-valor="A"><span class="letra">A</span><span>I é a transcrição, que ocorre no núcleo e produz RNAm a partir do DNA; II é a tradução, que ocorre nos ribossomos, no citoplasma, e produz a proteína.</span></button>
+    <button type="button" class="alternativa" data-valor="B"><span class="letra">B</span><span>I é a replicação, que duplica o DNA no núcleo; II é a transcrição, que forma a proteína no citoplasma.</span></button>
+    <button type="button" class="alternativa" data-valor="C"><span class="letra">C</span><span>I é a tradução, que ocorre no núcleo; II é a transcrição, que ocorre no citoplasma.</span></button>
+    <button type="button" class="alternativa" data-valor="D"><span class="letra">D</span><span>I e II são etapas da replicação do DNA, ambas realizadas pelos ribossomos.</span></button>
+    <button type="button" class="alternativa" data-valor="E"><span class="letra">E</span><span>I é a tradução, que forma o RNAm; II é a replicação, que forma os aminoácidos.</span></button>
+  </div>
+</div>
+
+<!-- ================= Q3 — Código genético (aula 4) ================= -->
+<div class="question" data-q="3" data-tipo="obj">
+  <div class="q-head"><span class="q-number">Questão 3</span><span class="q-tag">Objetiva</span></div>
+  <div class="q-text">
+    <p>Um trecho da fita-molde de um gene é transcrito em RNA mensageiro, que depois é traduzido com o auxílio do código genético. O trecho do gene e parte da tabela do código genético estão abaixo.</p>
+    <p class="q-command">Qual é a sequência de aminoácidos produzida a partir desse trecho?</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 270" role="img" aria-label="Fita-molde de DNA TAC AAA CCG ATT e tabela de códons">
+      <text x="30" y="35" font-size="15" font-weight="bold" fill="#003366">Fita-molde do DNA</text>
+      <g font-size="20" font-weight="bold" font-family="Consolas, monospace" text-anchor="middle">
+        <rect x="30" y="50" width="80" height="40" rx="6" fill="#bbdefb" stroke="#1565c0"/><text x="70" y="77">TAC</text>
+        <rect x="120" y="50" width="80" height="40" rx="6" fill="#bbdefb" stroke="#1565c0"/><text x="160" y="77">AAA</text>
+        <rect x="210" y="50" width="80" height="40" rx="6" fill="#bbdefb" stroke="#1565c0"/><text x="250" y="77">CCG</text>
+        <rect x="300" y="50" width="80" height="40" rx="6" fill="#bbdefb" stroke="#1565c0"/><text x="340" y="77">ATT</text>
+      </g>
+      <text x="30" y="125" font-size="13" fill="#333">Lembre: no RNA, a base complementar</text>
+      <text x="30" y="143" font-size="13" fill="#333">da adenina (A) é a uracila (U).</text>
+      <text x="30" y="168" font-size="13" fill="#333">Pares DNA → RNA: A–U, T–A, C–G, G–C.</text>
+      <text x="30" y="200" font-size="12" fill="#555">* AUG é também o códon de início.</text>
+
+      <g font-size="14">
+        <rect x="440" y="20" width="300" height="32" fill="#003366"/>
+        <text x="515" y="41" text-anchor="middle" fill="#fff" font-weight="bold">Códon (RNAm)</text>
+        <text x="665" y="41" text-anchor="middle" fill="#fff" font-weight="bold">Aminoácido</text>
+        <g font-family="Consolas, monospace">
+          <rect x="440" y="52" width="300" height="27" fill="#f3f6fb"/><text x="515" y="71" text-anchor="middle">AUG</text>
+          <rect x="440" y="79" width="300" height="27" fill="#fff"/><text x="515" y="98" text-anchor="middle">UAC</text>
+          <rect x="440" y="106" width="300" height="27" fill="#f3f6fb"/><text x="515" y="125" text-anchor="middle">UUU</text>
+          <rect x="440" y="133" width="300" height="27" fill="#fff"/><text x="515" y="152" text-anchor="middle">AAA</text>
+          <rect x="440" y="160" width="300" height="27" fill="#f3f6fb"/><text x="515" y="179" text-anchor="middle">GGC</text>
+          <rect x="440" y="187" width="300" height="27" fill="#fff"/><text x="515" y="206" text-anchor="middle">CCG</text>
+          <rect x="440" y="214" width="300" height="27" fill="#f3f6fb"/><text x="515" y="233" text-anchor="middle">AUU</text>
+          <rect x="440" y="241" width="300" height="27" fill="#fff"/><text x="515" y="260" text-anchor="middle">UAA</text>
+        </g>
+        <text x="665" y="71" text-anchor="middle">Metionina (Met)*</text>
+        <text x="665" y="98" text-anchor="middle">Tirosina (Tyr)</text>
+        <text x="665" y="125" text-anchor="middle">Fenilalanina (Phe)</text>
+        <text x="665" y="152" text-anchor="middle">Lisina (Lys)</text>
+        <text x="665" y="179" text-anchor="middle">Glicina (Gly)</text>
+        <text x="665" y="206" text-anchor="middle">Prolina (Pro)</text>
+        <text x="665" y="233" text-anchor="middle">Isoleucina (Ile)</text>
+        <text x="665" y="260" text-anchor="middle">Códon de parada</text>
+        <rect x="440" y="20" width="300" height="248" fill="none" stroke="#003366" stroke-width="1.5"/>
+        <line x1="590" y1="20" x2="590" y2="268" stroke="#003366"/>
+      </g>
+    </svg>
+    <figcaption>Trecho hipotético de gene e parte da tabela do código genético.</figcaption>
+  </figure>
+  <div class="alternativas">
+    <button type="button" class="alternativa" data-valor="A"><span class="letra">A</span><span>Tyr – Lys – Pro – Ile</span></button>
+    <button type="button" class="alternativa" data-valor="B"><span class="letra">B</span><span>Met – Phe – Gly</span></button>
+    <button type="button" class="alternativa" data-valor="C"><span class="letra">C</span><span>Met – Phe – Gly – Ile</span></button>
+    <button type="button" class="alternativa" data-valor="D"><span class="letra">D</span><span>Met – Lys – Pro</span></button>
+    <button type="button" class="alternativa" data-valor="E"><span class="letra">E</span><span>Nenhum aminoácido, pois o RNA mensageiro não participa da síntese de proteínas.</span></button>
+  </div>
+</div>
+
+<!-- ================= Q4 — Soro x vacina (aula 8) ================= -->
+<div class="question" data-q="4" data-tipo="obj">
+  <div class="q-head"><span class="q-number">Questão 4</span><span class="q-tag">Objetiva</span></div>
+  <div class="q-text">
+    <p>Um trabalhador rural foi picado por uma jararaca e levado ao pronto-socorro. O gráfico compara a quantidade de anticorpos no sangue após dois procedimentos usados na saúde: a aplicação de soro (curva A) e a aplicação de vacina, com reforço no dia 40 (curva B).</p>
+    <p class="q-command">Qual procedimento é indicado para o trabalhador e por quê?</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 700 320" role="img" aria-label="Gráfico de anticorpos: curva A alta logo no início e caindo; curva B subindo lentamente e com segundo pico maior">
+      <line x1="70" y1="250" x2="640" y2="250" stroke="#333" stroke-width="2"/>
+      <line x1="70" y1="30" x2="70" y2="250" stroke="#333" stroke-width="2"/>
+      <text x="30" y="140" font-size="13" transform="rotate(-90 30 140)" text-anchor="middle">Anticorpos no sangue</text>
+      <g font-size="12" text-anchor="middle">
+        <text x="70" y="268">0</text><text x="165" y="268">10</text><text x="260" y="268">20</text><text x="355" y="268">30</text><text x="450" y="268">40</text><text x="545" y="268">50</text><text x="640" y="268">60</text>
+        <text x="355" y="290" font-size="13">Tempo (dias)</text>
+      </g>
+      <path d="M70,250 L76,70 C120,80 180,150 260,215 C320,240 400,246 640,248" fill="none" stroke="#c62828" stroke-width="3.5"/>
+      <text x="96" y="62" font-size="15" font-weight="bold" fill="#c62828">A</text>
+      <path d="M70,250 L110,248 C150,240 180,180 210,175 C250,172 300,195 450,205 C470,200 480,60 520,55 C560,55 600,80 640,85" fill="none" stroke="#1565c0" stroke-width="3.5" stroke-dasharray="10 5"/>
+      <text x="215" y="165" font-size="15" font-weight="bold" fill="#1565c0">B</text>
+      <line x1="450" y1="250" x2="450" y2="215" stroke="#1565c0" stroke-dasharray="3 3"/>
+      <text x="455" y="242" font-size="11" fill="#1565c0">reforço</text>
+      <g font-size="12">
+        <line x1="160" y1="305" x2="190" y2="305" stroke="#c62828" stroke-width="3.5"/><text x="196" y="309">A: soro</text>
+        <line x1="320" y1="305" x2="350" y2="305" stroke="#1565c0" stroke-width="3.5" stroke-dasharray="10 5"/><text x="356" y="309">B: vacina (com reforço no dia 40)</text>
+      </g>
+    </svg>
+    <figcaption>Gráfico esquemático (fora de escala) da quantidade de anticorpos no sangue.</figcaption>
+  </figure>
+  <div class="alternativas">
+    <button type="button" class="alternativa" data-valor="A"><span class="letra">A</span><span>Vacina, pois ela faz o organismo produzir anticorpos imediatamente e em grande quantidade.</span></button>
+    <button type="button" class="alternativa" data-valor="B"><span class="letra">B</span><span>Vacina, pois a memória imunológica neutraliza o veneno no momento da picada.</span></button>
+    <button type="button" class="alternativa" data-valor="C"><span class="letra">C</span><span>Soro, pois estimula o organismo a produzir os próprios anticorpos e células de memória.</span></button>
+    <button type="button" class="alternativa" data-valor="D"><span class="letra">D</span><span>Antibiótico, pois o envenenamento é causado por bactérias presentes na boca da serpente.</span></button>
+    <button type="button" class="alternativa" data-valor="E"><span class="letra">E</span><span>Soro, pois fornece anticorpos prontos, de ação imediata e temporária, como mostra a curva A.</span></button>
+  </div>
+</div>
+
+<!-- ================= Q5 — Imunidade inata x adquirida (aula 9) ================= -->
+<div class="question" data-q="5" data-tipo="obj">
+  <div class="q-head"><span class="q-number">Questão 5</span><span class="q-tag">Objetiva</span></div>
+  <div class="q-text">
+    <p>Durante a campanha de vacinação na escola, a professora apresentou o quadro abaixo, que compara dois mecanismos de defesa do corpo humano.</p>
+    <p class="q-command">Os mecanismos I e II são classificados, respectivamente, como imunidade:</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 270" role="img" aria-label="Quadro comparando mecanismo I e mecanismo II de defesa">
+      <rect x="10" y="10" width="740" height="40" fill="#003366"/>
+      <text x="200" y="36" text-anchor="middle" font-size="16" fill="#fff" font-weight="bold">Mecanismo I</text>
+      <text x="570" y="36" text-anchor="middle" font-size="16" fill="#fff" font-weight="bold">Mecanismo II</text>
+      <g font-size="14">
+        <rect x="10" y="50" width="740" height="42" fill="#f3f6fb"/>
+        <text x="25" y="76">Presente desde o nascimento</text><text x="395" y="76">Desenvolvida após contato com antígenos</text>
+        <rect x="10" y="92" width="740" height="42" fill="#fff"/>
+        <text x="25" y="118">Resposta rápida (minutos a horas)</text><text x="395" y="118">Resposta mais lenta no primeiro contato</text>
+        <rect x="10" y="134" width="740" height="42" fill="#f3f6fb"/>
+        <text x="25" y="160">Inespecífica: age contra vários invasores</text><text x="395" y="160">Específica para cada antígeno</text>
+        <rect x="10" y="176" width="740" height="42" fill="#fff"/>
+        <text x="25" y="202">Não forma células de memória</text><text x="395" y="202">Forma células de memória</text>
+        <rect x="10" y="218" width="740" height="42" fill="#f3f6fb"/>
+        <text x="25" y="244">Ex.: pele, mucosas, inflamação, fagócitos</text><text x="395" y="244">Ex.: linfócitos B e T, anticorpos</text>
+      </g>
+      <rect x="10" y="10" width="740" height="250" fill="none" stroke="#003366" stroke-width="2"/>
+      <line x1="380" y1="10" x2="380" y2="260" stroke="#003366" stroke-width="1.5"/>
+    </svg>
+    <figcaption>Quadro elaborado para fins didáticos.</figcaption>
+  </figure>
+  <div class="alternativas">
+    <button type="button" class="alternativa" data-valor="A"><span class="letra">A</span><span>adquirida e inata; as vacinas estimulam o mecanismo I.</span></button>
+    <button type="button" class="alternativa" data-valor="B"><span class="letra">B</span><span>inata e adquirida; as vacinas estimulam o mecanismo I, porque a resposta é mais rápida.</span></button>
+    <button type="button" class="alternativa" data-valor="C"><span class="letra">C</span><span>inata e adquirida; as vacinas estimulam o mecanismo II, que é específico e forma memória.</span></button>
+    <button type="button" class="alternativa" data-valor="D"><span class="letra">D</span><span>adquirida e adquirida; as vacinas estimulam os dois mecanismos da mesma forma.</span></button>
+    <button type="button" class="alternativa" data-valor="E"><span class="letra">E</span><span>adquirida e inata; as vacinas estimulam o mecanismo II, porque ele existe desde o nascimento.</span></button>
+  </div>
+</div>
+
+<!-- ================= Q6 — Clonagem (aula 6) ================= -->
+<div class="question" data-q="6" data-tipo="obj">
+  <div class="q-head"><span class="q-number">Questão 6</span><span class="q-tag">Objetiva</span></div>
+  <div class="q-text">
+    <p>O esquema mostra a técnica de transferência nuclear: o núcleo de uma célula do corpo da ovelha A é colocado em um óvulo sem núcleo da ovelha B. O embrião formado pode seguir dois caminhos.</p>
+    <p class="q-command">Qual alternativa compara corretamente os caminhos 1 e 2?</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 330" role="img" aria-label="Esquema de clonagem com caminho 1 para útero e filhote e caminho 2 para cultura de células-tronco e tecidos">
+      <defs><marker id="b6" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#003366"/></marker></defs>
+      <g font-size="12" text-anchor="middle">
+        <rect x="15" y="20" width="150" height="70" rx="10" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+        <text x="90" y="44" font-weight="bold" fill="#0d47a1">Ovelha A</text><text x="90" y="62">célula da glândula</text><text x="90" y="78">mamária (núcleo)</text>
+        <rect x="15" y="120" width="150" height="70" rx="10" fill="#fce4ec" stroke="#ad1457" stroke-width="2"/>
+        <text x="90" y="144" font-weight="bold" fill="#880e4f">Ovelha B</text><text x="90" y="162">óvulo do qual o</text><text x="90" y="178">núcleo foi retirado</text>
+        <line x1="165" y1="55" x2="220" y2="95" stroke="#003366" stroke-width="2.5" marker-end="url(#b6)"/>
+        <line x1="165" y1="155" x2="220" y2="118" stroke="#003366" stroke-width="2.5" marker-end="url(#b6)"/>
+        <circle cx="265" cy="105" r="38" fill="#fff9c4" stroke="#f9a825" stroke-width="2.5"/>
+        <circle cx="265" cy="105" r="14" fill="#1565c0"/>
+        <text x="265" y="160" font-weight="bold">Fusão e</text><text x="265" y="176" font-weight="bold">divisões iniciais</text>
+        <circle cx="365" cy="105" r="22" fill="#ffe0b2" stroke="#e65100" stroke-width="2"/>
+        <circle cx="358" cy="98" r="7" fill="#ffcc80"/><circle cx="372" cy="98" r="7" fill="#ffcc80"/><circle cx="358" cy="112" r="7" fill="#ffcc80"/><circle cx="372" cy="112" r="7" fill="#ffcc80"/>
+        <line x1="305" y1="105" x2="340" y2="105" stroke="#003366" stroke-width="2.5" marker-end="url(#b6)"/>
+        <text x="365" y="145">embrião</text>
+        <path d="M390,95 C430,60 450,55 490,55" fill="none" stroke="#003366" stroke-width="2.5" marker-end="url(#b6)"/>
+        <path d="M390,118 C430,170 450,215 490,225" fill="none" stroke="#003366" stroke-width="2.5" marker-end="url(#b6)"/>
+        <text x="430" y="50" font-weight="bold" fill="#c62828" font-size="15">1</text>
+        <text x="420" y="215" font-weight="bold" fill="#c62828" font-size="15">2</text>
+        <rect x="495" y="20" width="250" height="75" rx="10" fill="#e8f5e9" stroke="#1b5e20" stroke-width="2"/>
+        <text x="620" y="44">implantado no útero da ovelha C</text><text x="620" y="64">↓</text><text x="620" y="84" font-weight="bold">nasce um filhote</text>
+        <rect x="495" y="185" width="250" height="95" rx="10" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+        <text x="620" y="208">células-tronco embrionárias</text><text x="620" y="226">cultivadas em laboratório</text><text x="620" y="246">↓</text><text x="620" y="268" font-weight="bold">tecidos (cardíaco, nervoso…)</text>
+      </g>
+      <text x="380" y="315" text-anchor="middle" font-size="12" fill="#555">Ovelha C: apenas gesta o embrião.</text>
+    </svg>
+    <figcaption>Esquema simplificado (fora de escala) da clonagem por transferência nuclear.</figcaption>
+  </figure>
+  <div class="alternativas">
+    <button type="button" class="alternativa" data-valor="A"><span class="letra">A</span><span>Os dois caminhos são clonagem reprodutiva, pois ambos utilizam um óvulo.</span></button>
+    <button type="button" class="alternativa" data-valor="B"><span class="letra">B</span><span>O caminho 1 é clonagem reprodutiva, que origina um indivíduo com o DNA nuclear idêntico ao da ovelha A; o caminho 2 é clonagem terapêutica, que produz células e tecidos sem formar um indivíduo.</span></button>
+    <button type="button" class="alternativa" data-valor="C"><span class="letra">C</span><span>O caminho 1 é clonagem terapêutica, pois o filhote poderá doar órgãos para tratar a ovelha A.</span></button>
+    <button type="button" class="alternativa" data-valor="D"><span class="letra">D</span><span>O caminho 2 é clonagem reprodutiva, e as células obtidas são geneticamente idênticas à ovelha B, que forneceu o óvulo.</span></button>
+    <button type="button" class="alternativa" data-valor="E"><span class="letra">E</span><span>Os dois caminhos são técnicas de DNA recombinante, nas quais genes de outra espécie são inseridos no embrião.</span></button>
+  </div>
+</div>
+
+<!-- ================= Q7 — CRISPR e terapia gênica (aulas 5 e 7) ================= -->
+<div class="question" data-q="7" data-tipo="obj">
+  <div class="q-head"><span class="q-number">Questão 7</span><span class="q-tag">Objetiva</span></div>
+  <div class="q-text">
+    <p>A ferramenta CRISPR/Cas9 permite editar genes com precisão. Ela já é usada em terapias gênicas aprovadas para doenças como a anemia falciforme, em que células da medula óssea do próprio paciente são editadas. Em 2018, porém, um pesquisador anunciou o nascimento de bebês com genes editados ainda no embrião, o que gerou condenação internacional.</p>
+    <p class="q-command">Com base no esquema, qual alternativa analisa corretamente a técnica e o debate ético?</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 300" role="img" aria-label="Esquema do CRISPR Cas9 cortando o DNA e comparação entre edição somática e embrionária">
+      <g font-size="12">
+        <line x1="40" y1="70" x2="420" y2="70" stroke="#1565c0" stroke-width="6"/>
+        <line x1="40" y1="92" x2="420" y2="92" stroke="#0d47a1" stroke-width="6"/>
+        <rect x="190" y="50" width="90" height="20" fill="#ffcdd2"/>
+        <text x="210" y="45" text-anchor="middle" fill="#c62828" font-weight="bold">sequência-alvo</text>
+        <ellipse cx="235" cy="118" rx="95" ry="32" fill="#c8e6c9" stroke="#1b5e20" stroke-width="2" opacity=".9"/>
+        <text x="235" y="122" text-anchor="middle" font-weight="bold" fill="#1b5e20">proteína Cas9</text>
+        <path d="M170,140 C200,165 250,170 300,150" fill="none" stroke="#6a1b9a" stroke-width="4"/>
+        <text x="235" y="185" text-anchor="middle" fill="#6a1b9a" font-weight="bold">RNA-guia (reconhece o alvo)</text>
+        <text x="284" y="44" font-size="20">✂</text>
+        <text x="308" y="44" fill="#333">corte preciso</text>
+        <text x="40" y="230" fill="#333">Depois do corte, a célula repara o DNA, e o gene</text>
+        <text x="40" y="248" fill="#333">pode ser desativado, corrigido ou substituído.</text>
+      </g>
+      <g font-size="12">
+        <rect x="460" y="20" width="285" height="120" rx="10" fill="#e8f5e9" stroke="#1b5e20" stroke-width="2"/>
+        <text x="602" y="44" text-anchor="middle" font-weight="bold" fill="#1b5e20">Edição em células somáticas</text>
+        <text x="472" y="68">• Ex.: células da medula óssea</text>
+        <text x="472" y="88">• Alteração só no paciente tratado</text>
+        <text x="472" y="108">• NÃO é transmitida aos filhos</text>
+        <rect x="460" y="155" width="285" height="120" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+        <text x="602" y="179" text-anchor="middle" font-weight="bold" fill="#b71c1c">Edição em embriões</text>
+        <text x="472" y="203">• Altera todas as células, inclusive</text>
+        <text x="484" y="221">as que formarão gametas</text>
+        <text x="472" y="241">• É transmitida às próximas gerações</text>
+      </g>
+    </svg>
+    <figcaption>Esquema simplificado (fora de escala) do funcionamento do CRISPR/Cas9.</figcaption>
+  </figure>
+  <div class="alternativas">
+    <button type="button" class="alternativa" data-valor="A"><span class="letra">A</span><span>O CRISPR/Cas9 sempre insere genes de outras espécies; por isso, qualquer uso da técnica é proibido.</span></button>
+    <button type="button" class="alternativa" data-valor="B"><span class="letra">B</span><span>A edição de células somáticas é transmitida aos filhos e, por isso, é a aplicação mais controversa.</span></button>
+    <button type="button" class="alternativa" data-valor="C"><span class="letra">C</span><span>A edição de embriões afeta apenas o indivíduo editado, sem implicações para as gerações futuras.</span></button>
+    <button type="button" class="alternativa" data-valor="D"><span class="letra">D</span><span>A Cas9, guiada por um RNA, corta o DNA em um ponto específico; na terapia em células somáticas a alteração fica restrita ao paciente, já a edição de embriões é herdada pelas próximas gerações, o que exige debate ético e regulação mais rigorosos.</span></button>
+    <button type="button" class="alternativa" data-valor="E"><span class="letra">E</span><span>Como o RNA-guia é produzido em laboratório, a técnica não apresenta riscos e dispensa avaliação ética.</span></button>
+  </div>
+</div>
+
+<!-- ================= Q8 — Células HeLa e bioética (aula 1) ================= -->
+<div class="question" data-q="8" data-tipo="dis">
+  <div class="q-head"><span class="q-number">Questão 8</span><span class="q-tag">Dissertativa</span></div>
+  <div class="q-text">
+    <p>Em 1951, Henrietta Lacks, uma mulher negra de 31 anos, foi tratada de câncer do colo do útero em um hospital dos Estados Unidos. Sem que ela ou a família soubessem, células do tumor foram retiradas e cultivadas: elas se multiplicavam sem parar e deram origem à linhagem HeLa, usada até hoje em laboratórios do mundo todo. A linha do tempo resume essa história.</p>
+    <p class="q-command">Analise a importância das células HeLa para a ciência e o problema ético envolvido na sua obtenção. Em seguida, explique que princípio da bioética deveria ter sido respeitado e como ele é aplicado nas pesquisas atuais.</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 250" role="img" aria-label="Linha do tempo das células HeLa de 1951 a 2023">
+      <defs><marker id="b8" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333"/></marker></defs>
+      <line x1="20" y1="110" x2="740" y2="110" stroke="#333" stroke-width="3" marker-end="url(#b8)"/>
+      <g font-size="12" text-anchor="middle">
+        <circle cx="80" cy="110" r="10" fill="#ffcdd2" stroke="#c62828" stroke-width="2"/>
+        <text x="80" y="88" font-weight="bold" font-size="14">1951</text>
+        <text x="80" y="140">Células retiradas</text><text x="80" y="156">sem consentimento;</text><text x="80" y="172">Henrietta morre</text><text x="80" y="188">no mesmo ano</text>
+        <circle cx="230" cy="110" r="10" fill="#c8e6c9" stroke="#1b5e20" stroke-width="2"/>
+        <text x="230" y="88" font-weight="bold" font-size="14">anos 1950</text>
+        <text x="230" y="140">Usadas nos testes</text><text x="230" y="156">da vacina contra</text><text x="230" y="172">a poliomielite</text>
+        <circle cx="380" cy="110" r="10" fill="#c8e6c9" stroke="#1b5e20" stroke-width="2"/>
+        <text x="380" y="88" font-weight="bold" font-size="14">décadas seguintes</text>
+        <text x="380" y="140">Pesquisas sobre câncer,</text><text x="380" y="156">HPV, HIV, radiação e</text><text x="380" y="172">medicamentos; vendidas</text><text x="380" y="188">por empresas</text>
+        <circle cx="530" cy="110" r="10" fill="#fff59d" stroke="#f57f17" stroke-width="2"/>
+        <text x="530" y="88" font-weight="bold" font-size="14">anos 1970</text>
+        <text x="530" y="140">A família descobre</text><text x="530" y="156">que as células</text><text x="530" y="172">eram usadas</text>
+        <circle cx="670" cy="110" r="10" fill="#bbdefb" stroke="#1565c0" stroke-width="2"/>
+        <text x="670" y="88" font-weight="bold" font-size="14">2013 e 2023</text>
+        <text x="670" y="140">Acordos dão à família</text><text x="670" y="156">voz sobre o uso dos</text><text x="670" y="172">dados genéticos e</text><text x="670" y="188">compensação</text>
+      </g>
+      <text x="380" y="235" text-anchor="middle" font-size="12" fill="#555">Na época, não havia exigência de consentimento para usar tecidos retirados de pacientes.</text>
+    </svg>
+    <figcaption>Linha do tempo simplificada da história das células HeLa.</figcaption>
+  </figure>
+  <textarea class="resposta" id="r8" placeholder="Escreva sua resposta aqui…"></textarea>
+  <div class="contador" id="c8">0 caracteres</div>
+</div>
+
+<!-- ================= Q9 — Darwinismo social, eugenia e bioética (aulas 10 e 11) ================= -->
+<div class="question" data-q="9" data-tipo="dis">
+  <div class="q-head"><span class="q-number">Questão 9</span><span class="q-tag">Dissertativa</span></div>
+  <div class="q-text">
+    <p>No final do século XIX e início do século XX, ideias como o darwinismo social e a eugenia foram apresentadas como “científicas” e usadas para justificar desigualdades. No Brasil, a Sociedade Eugênica de São Paulo foi fundada em 1918. O quadro compara essas ideias com a teoria da evolução de Darwin.</p>
+    <p class="q-command">Explique por que o darwinismo social e a eugenia são um uso indevido da teoria de Darwin, cite uma consequência histórica dessas ideias e explique como a bioética atua para impedir que isso se repita.</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 312" role="img" aria-label="Quadro comparando teoria da evolução e darwinismo social e eugenia, com marcos da bioética">
+      <rect x="10" y="10" width="365" height="40" rx="6" fill="#1b5e20"/>
+      <text x="192" y="36" text-anchor="middle" font-size="15" fill="#fff" font-weight="bold">Teoria da evolução (Darwin, 1859)</text>
+      <rect x="385" y="10" width="365" height="40" rx="6" fill="#b71c1c"/>
+      <text x="567" y="36" text-anchor="middle" font-size="15" fill="#fff" font-weight="bold">Darwinismo social e eugenia</text>
+      <g font-size="13">
+        <rect x="10" y="55" width="365" height="162" fill="#e8f5e9"/>
+        <text x="22" y="80">• Explica como as populações de seres</text><text x="34" y="97">vivos mudam ao longo das gerações</text>
+        <text x="22" y="122">• Seleção natural: descreve um processo,</text><text x="34" y="139">não diz quem “vale mais”</text>
+        <text x="22" y="164">• Baseada em evidências e testável</text>
+        <text x="22" y="189">• Variação genética é a base da evolução</text>
+        <rect x="385" y="55" width="365" height="162" fill="#ffebee"/>
+        <text x="397" y="80">• Aplica a ideia de “sobrevivência do mais</text><text x="409" y="97">apto” às sociedades humanas</text>
+        <text x="397" y="122">• Classifica grupos humanos como</text><text x="409" y="139">“superiores” e “inferiores”</text>
+        <text x="397" y="164">• Propõe controlar quem pode ter filhos</text>
+        <text x="397" y="189">• Sem base científica: não existem</text><text x="409" y="206">raças humanas biológicas</text>
+      </g>
+      <rect x="10" y="227" width="740" height="75" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+      <text x="380" y="249" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">Marcos da bioética</text>
+      <g font-size="12" text-anchor="middle">
+        <text x="135" y="272">1947 – Código de Nuremberg</text><text x="135" y="289">(consentimento em pesquisas)</text>
+        <text x="380" y="272">1948 – Declaração Universal</text><text x="380" y="289">dos Direitos Humanos</text>
+        <text x="625" y="272">2005 – Declaração Universal sobre</text><text x="625" y="289">Bioética e Direitos Humanos (UNESCO)</text>
+      </g>
+    </svg>
+    <figcaption>Quadro elaborado para fins didáticos.</figcaption>
+  </figure>
+  <textarea class="resposta" id="r9" placeholder="Escreva sua resposta aqui…"></textarea>
+  <div class="contador" id="c9">0 caracteres</div>
+</div>
+
+<!-- ================= Q10 — Heredograma do daltonismo (aula 12) ================= -->
+<div class="question" data-q="10" data-tipo="dis">
+  <div class="q-head"><span class="q-number">Questão 10</span><span class="q-tag">Dissertativa</span></div>
+  <div class="q-text">
+    <p>O daltonismo é uma alteração na percepção de cores causada por um alelo recessivo localizado no cromossomo X (X<sup>d</sup>). O heredograma mostra a ocorrência do daltonismo em uma família.</p>
+    <p class="q-command">a) Indique os genótipos de I-2 e de II-3 e justifique com base no heredograma. b) Qual é a probabilidade de o próximo filho do casal II-3 e II-4 ser um menino daltônico? Mostre como chegou ao resultado. c) Explique por que casamentos entre parentes próximos (endogamia) aumentam a chance de nascerem pessoas com características recessivas e como isso afeta a diversidade genética.</p>
+  </div>
+  <figure class="q-image">
+    <svg viewBox="0 0 760 320" role="img" aria-label="Heredograma de três gerações com homens daltônicos II-1 e III-1">
+      <g stroke="#333" stroke-width="2.5" fill="none">
+        <line x1="290" y1="60" x2="370" y2="60"/>
+        <line x1="330" y1="60" x2="330" y2="100"/>
+        <line x1="180" y1="100" x2="440" y2="100"/>
+        <line x1="180" y1="100" x2="180" y2="130"/><line x1="310" y1="100" x2="310" y2="130"/><line x1="440" y1="100" x2="440" y2="130"/>
+        <line x1="462" y1="150" x2="540" y2="150"/>
+        <line x1="500" y1="150" x2="500" y2="195"/>
+        <line x1="400" y1="195" x2="600" y2="195"/>
+        <line x1="400" y1="195" x2="400" y2="225"/><line x1="500" y1="195" x2="500" y2="225"/><line x1="600" y1="195" x2="600" y2="225"/>
+      </g>
+      <g stroke="#333" stroke-width="2.5">
+        <rect x="250" y="40" width="40" height="40" fill="#fff"/>
+        <circle cx="390" cy="60" r="20" fill="#fff"/>
+        <rect x="160" y="130" width="40" height="40" fill="#333"/>
+        <circle cx="310" cy="150" r="20" fill="#fff"/>
+        <circle cx="440" cy="150" r="20" fill="#fff"/>
+        <rect x="540" y="130" width="40" height="40" fill="#fff"/>
+        <rect x="380" y="225" width="40" height="40" fill="#333"/>
+        <circle cx="500" cy="245" r="20" fill="#fff"/>
+        <rect x="580" y="225" width="40" height="40" fill="#fff"/>
+      </g>
+      <g font-size="13" text-anchor="middle" font-weight="bold">
+        <text x="270" y="30">I-1</text><text x="390" y="30">I-2</text>
+        <text x="180" y="190">II-1</text><text x="310" y="190">II-2</text><text x="440" y="190">II-3</text><text x="560" y="190">II-4</text>
+        <text x="400" y="285">III-1</text><text x="500" y="285">III-2</text><text x="600" y="285">III-3</text>
+      </g>
+      <g font-size="13" font-weight="bold" fill="#003366"><text x="20" y="65">I</text><text x="20" y="155">II</text><text x="20" y="250">III</text></g>
+      <g font-size="12">
+        <rect x="640" y="40" width="22" height="22" fill="#fff" stroke="#333" stroke-width="2"/><text x="668" y="56">homem</text>
+        <circle cx="651" cy="85" r="11" fill="#fff" stroke="#333" stroke-width="2"/><text x="668" y="89">mulher</text>
+        <rect x="640" y="108" width="22" height="22" fill="#333"/><text x="668" y="118">homem</text><text x="668" y="132">daltônico</text>
+      </g>
+      <text x="380" y="310" text-anchor="middle" font-size="12" fill="#555">Símbolos claros: visão normal para cores.</text>
+    </svg>
+    <figcaption>Heredograma hipotético de uma família com casos de daltonismo.</figcaption>
+  </figure>
+  <textarea class="resposta" id="r10" placeholder="Escreva sua resposta aqui…"></textarea>
+  <div class="contador" id="c10">0 caracteres</div>
+</div>
+
+</div>
+
+
+<div class="footer-bar">
+  <div class="progresso" id="progresso">0 de 10 questões respondidas</div>
+  <div class="barra"><div id="barra"></div></div>
+  <button id="btnEnviar" type="button">Enviar respostas</button>
+  <div id="status"></div>
+</div>
+
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURAÇÃO — cole aqui a URL do Web App do Apps Script
+   ========================================================= */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFe_BkAfvA0f2socvbK7pZ8izccurC4y7b_rM7wl_X0POKwjZX7iLQVSFgQZ_A-U4/exec";
+const ATIVIDADE = "Biologia - 2ª Série - 3º Bimestre - AE6/AE7";
+
+/* ===== Fonte de dados: Turma/Série → alunos (nome e RA) ===== */
+const TURMAS = {
+  "2ª Série EM C": [
+    ["ALICIA KEMILLY SULINO REIS","000110496463"],
+    ["ANA BEATRIZ OLIVEIRA ALVES","000115107050"],
+    ["ANA CLARA FERNANDES DA SILVA","000112733688"],
+    ["ANDRÉ RICARDO BUENO EMILIO FILHO","000114145951"],
+    ["ARTHUR RIBEIRO SOARES LUZ","000115556623"],
+    ["ASHELEY DE PAULA PEREIRA GARCIA","000112216890"],
+    ["BARBARA VITÓRIA SANTOS SOUZA","000112229643"],
+    ["CARLOS EDUARDO DE FREITAS PINHEIRO LOPES","000113358030"],
+    ["DAVÍ ALMEIDA LIMA","000113204173"],
+    ["DESIREE RODRIGUES DE AMORIM","000112117613"],
+    ["ERIK TAVARES AUGUSTO","000110062207"],
+    ["GABRIEL FREITAS DE BARROS","000112226824"],
+    ["GIOVANNA SOUZA DE ALBUQUERQUE","000115546312"],
+    ["GUILHERME FAGUNDES DE ARAUJO","000111895869"],
+    ["GUILHERME XAVIER DE MACÊDO","000114147486"],
+    ["HELIO HENRIQUE LAMBERT VIEIRA","000114162451"],
+    ["INARA BEZERRA DA SILVA","000110498121"],
+    ["ISABELLA DE SOUZA BARROS","000114727075"],
+    ["JAQUELINE LEMOS CUNHA DE AMORIM","000115107760"],
+    ["KAIQUE SORACE MOTA SILVA","000113153420"],
+    ["LAIS MIKAELLY ROCHA SILVA","000114156896"],
+    ["LARA BARROS DA SILVA","000111931694"],
+    ["LUANA DA SILVA ROCHA DOS SANTOS","000113211690"],
+    ["LUCAS PERES DE SOUZA","000111126924"],
+    ["LUIZA AVELA ORTEGA","000112228678"],
+    ["MARCOS VINICIUS DE SOUZA ALVES","000114239845"],
+    ["MARIA EDUARDA CHAGAS GONÇALVES","000112216421"],
+    ["MARIAH EDUARDA PEDROSO MARTINS","000112216902"],
+    ["MARIANA LOPES GRAÇA","000112025243"],
+    ["MATHEUS FELIPE SILVA SOUZA","000111717661"],
+    ["MIRELA DE OLIVEIRA MARTINS","000112221629"],
+    ["PABLO VINICIUS SILVA DE LIMA","000113208199"],
+    ["PEDRO HENRIQUE BARRETO REGIS","000112212951"],
+    ["PEDRO HENRIQUE CORDEIRO MACEDO","000116598301"],
+    ["PEDRO HENRIQUE VITORINO TOMAZ DOS SANTOS","000113206613"],
+    ["PEDRO PAULO DE SOUZA NEVES","000111931821"],
+    ["SAMUEL RIBEIRO SOARES LUZ","000115556771"],
+    ["VITOR DORICE DOS SANTOS","000114157198"],
+    ["YASMIN VITORIA SIQUEIRA FERNANDES","000112228037"]
+  ]
+  /* Para incluir outra turma, acrescente: "2ª Série EM D": [["NOME","RA"], ...] */
+};
+
+const $ = (id) => document.getElementById(id);
+const respostas = {};
+let enviado = false;
+
+/* ----- Embaralha a ordem das questões a cada acesso ----- */
+let ORDEM_EXIBIDA = "";
+(function embaralharQuestoes() {
+  const box = $("questoes");
+  const qs = Array.from(box.querySelectorAll(":scope > .question"));
+  for (let i = qs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [qs[i], qs[j]] = [qs[j], qs[i]];
+  }
+  qs.forEach((q, i) => {
+    box.appendChild(q);
+    q.querySelector(".q-number").textContent = "Questão " + (i + 1);
+  });
+  ORDEM_EXIBIDA = qs.map(q => "Q" + q.dataset.q).join(",");
+})();
+
+/* ----- Cabeçalho em cascata ----- */
+(function iniciarCabecalho() {
+  const selTurma = $("turma");
+  Object.keys(TURMAS).forEach(t => selTurma.add(new Option(t, t)));
+  $("data").value = new Date().toLocaleDateString("pt-BR");
+
+  selTurma.addEventListener("change", () => {
+    const selNome = $("nome");
+    selNome.innerHTML = "";
+    $("ra").value = "";
+    if (!selTurma.value) {
+      selNome.add(new Option("Selecione primeiro a turma", ""));
+      selNome.disabled = true;
+      return;
+    }
+    selNome.add(new Option("Selecione seu nome…", ""));
+    TURMAS[selTurma.value].forEach(([nome, ra]) => selNome.add(new Option(nome, ra)));
+    selNome.disabled = false;
+  });
+
+  $("nome").addEventListener("change", (e) => { $("ra").value = e.target.value || ""; });
+})();
+
+/* ----- Alternativas: alto relevo → afundar ----- */
+document.querySelectorAll('.question[data-tipo="obj"]').forEach(q => {
+  const num = q.dataset.q;
+  q.querySelectorAll(".alternativa").forEach(btn => {
+    btn.setAttribute("aria-pressed", "false");
+    btn.addEventListener("click", () => {
+      if (enviado) return;
+      q.querySelectorAll(".alternativa").forEach(b => { b.classList.remove("selecionada"); b.setAttribute("aria-pressed", "false"); });
+      btn.classList.add("selecionada");
+      btn.setAttribute("aria-pressed", "true");
+      respostas["Q" + num] = btn.dataset.valor;
+      atualizarProgresso();
+    });
+  });
+});
+
+/* ----- Dissertativas ----- */
+[8, 9, 10].forEach(n => {
+  const ta = $("r" + n);
+  ta.addEventListener("input", () => {
+    $("c" + n).textContent = ta.value.length + " caracteres";
+    atualizarProgresso();
+  });
+});
+
+function atualizarProgresso() {
+  let total = 0;
+  for (let i = 1; i <= 7; i++) if (respostas["Q" + i]) total++;
+  [8, 9, 10].forEach(n => { if ($("r" + n).value.trim().length > 0) total++; });
+  $("progresso").textContent = total + " de 10 questões respondidas";
+  $("barra").style.width = (total * 10) + "%";
+  return total;
+}
+
+
+
+/* ----- Envio para o Google Sheets ----- */
+$("btnEnviar").addEventListener("click", async () => {
+  const status = $("status");
+  status.className = "";
+  if (enviado) return;
+
+  const turma = $("turma").value, nomeSel = $("nome"), ra = $("ra").value;
+  const nome = nomeSel.selectedIndex > 0 ? nomeSel.options[nomeSel.selectedIndex].text : "";
+  if (!turma || !nome) {
+    status.className = "erro"; status.textContent = "Selecione a Turma/Série e o seu Nome antes de enviar.";
+    window.scrollTo({ top: 0, behavior: "smooth" }); return;
+  }
+  const respondidas = atualizarProgresso();
+  if (respondidas < 10 && !confirm("Você respondeu " + respondidas + " de 10 questões. Deseja enviar assim mesmo?")) return;
+
+  if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.indexOf("http") !== 0) {
+    status.className = "erro";
+    status.textContent = "Envio não configurado: o professor precisa colar a URL do Web App no código (APPS_SCRIPT_URL).";
+    return;
+  }
+
+  const payload = {
+    atividade: ATIVIDADE, turma, nome, ra, ordem: ORDEM_EXIBIDA,
+    data: new Date().toLocaleString("pt-BR"),
+    Q1: respostas.Q1 || "", Q2: respostas.Q2 || "", Q3: respostas.Q3 || "", Q4: respostas.Q4 || "",
+    Q5: respostas.Q5 || "", Q6: respostas.Q6 || "", Q7: respostas.Q7 || "",
+    Q8: $("r8").value.trim(), Q9: $("r9").value.trim(), Q10: $("r10").value.trim()
+  };
+
+  const btn = $("btnEnviar");
+  btn.disabled = true; btn.textContent = "Enviando…";
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST", mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    enviado = true;
+    document.querySelectorAll(".alternativa").forEach(b => b.disabled = true);
+    document.querySelectorAll("textarea, select").forEach(el => el.disabled = true);
+    btn.textContent = "Respostas enviadas ✔";
+    status.className = "ok";
+    status.textContent = "Obrigado, " + nome.split(" ")[0] + "! Suas respostas foram enviadas ao professor.";
+  } catch (err) {
+    btn.disabled = false; btn.textContent = "Enviar respostas";
+    status.className = "erro";
+    status.textContent = "Não foi possível enviar (verifique a internet) e tente novamente.";
+  }
+});
+</script>
+</body>
+</html>
